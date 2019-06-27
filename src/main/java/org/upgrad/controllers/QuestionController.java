@@ -4,49 +4,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.upgrad.models.Question;
 import org.upgrad.models.User;
 import org.upgrad.services.QuestionService;
-import org.upgrad.services.UserService;
+
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @RestController
+@RequestMapping("/api/question/")
 public class QuestionController {
 
     @Autowired
     private QuestionService questionService;
 
-    /**
-     * @param categoryId Set of category Ids to which question belongs
-     * @param question content of the question
-     * @param session HTTP session object
-     * @return returns the appropriate JSON response
-     */
-    @PostMapping("/api/question")
-    public ResponseEntity<?> createQuestion(@RequestParam("categoryId") Set<Integer> categoryId, @RequestParam("question") String question, HttpSession session) {
+    @PostMapping("/")
+    public ResponseEntity<?> addQuestion(@RequestParam("categoryId") Set<Integer> categoryId, @RequestParam("question") String question, HttpSession session) {
 
         if (session.getAttribute("currUser")==null) {
-            return new ResponseEntity<>("Please Login",HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Please Login first to access this endpoint!",HttpStatus.UNAUTHORIZED);
         }
         else {
             User user = (User) session.getAttribute("currUser");
             questionService.addQuestion(question, user.getId(),categoryId);
-            return new ResponseEntity<>("Question is added.", HttpStatus.OK);
+            return new ResponseEntity<>("Question added successfully.", HttpStatus.OK);
         }
     }
 
-    /**
-     * @param categoryId category id for which questions are to be retrieved
-     * @param session HTTP session
-     * @return returns all questions based on categoryId
-     */
-    @GetMapping("/api/question/all/{categoryId}")
+    @GetMapping("/all/{categoryId}")
     public ResponseEntity<?> getAllQuestionsByCategory(@PathVariable("categoryId") int categoryId, HttpSession session) {
 
         if (session.getAttribute("currUser")==null) {
-            return new ResponseEntity<>("Please Login",HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Please Login first to access this endpoint!",HttpStatus.UNAUTHORIZED);
         }
 
         else {
@@ -55,15 +43,11 @@ public class QuestionController {
         }
     }
 
-    /**
-     * @param session HTTP session
-     * @return returns all questions for the logged in user
-     */
-    @GetMapping("/api/question/all")
+    @GetMapping("/all")
     public ResponseEntity<?> getAllQuestionsByUser(HttpSession session) {
 
-        if (session.getAttribute("currUser")==null) {
-            return new ResponseEntity<>("Please Login",HttpStatus.UNAUTHORIZED);
+        if (session.getAttribute("currUser")== null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!",HttpStatus.UNAUTHORIZED);
         }
 
         else {
@@ -72,27 +56,23 @@ public class QuestionController {
         }
     }
 
-    /**
-     * @param questionId the path variable  'questionId' of data type Integer which has to be deleted.
-     * @param session HTTP session
-     * @return returns appropriate JSON response
-     */
-    @DeleteMapping("/api/question/{questionId}")
+
+    @DeleteMapping("/{questionId}")
     public ResponseEntity<?> deleteQuestion(@PathVariable("questionId") int questionId,HttpSession session) {
 
         if (session.getAttribute("currUser")==null) {
-            return new ResponseEntity<>("Please Login",HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Please Login first to access this endpoint!",HttpStatus.UNAUTHORIZED);
         }
 
         else {
             User user = (User) session.getAttribute("currUser");
-            int userId = questionService.findUserIdfromQuestion(questionId);
+            int userId = questionService.findUserIdFromQuestion(questionId);
             if(userId == user.getId() || user.getRole().equalsIgnoreCase("admin")) {
                 questionService.deleteQuestion(questionId);
-                return new ResponseEntity<>("Question and it'sId " + questionId + " deleted.", HttpStatus.OK);
+                return new ResponseEntity<>("Question with questionId " + questionId + " deleted successfully.", HttpStatus.OK);
             }
             else {
-                return new ResponseEntity<>("You can't delete this question!", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("You do not have rights to delete this question!", HttpStatus.FORBIDDEN);
             }
         }
     }

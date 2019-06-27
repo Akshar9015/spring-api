@@ -16,11 +16,11 @@ public class QuestionServiceImp implements QuestionService {
     QuestionRepository questionRepository;
 
     @Override
-    public void addQuestion(String content, int user_id,Set<Integer> categoryId) {
-        questionRepository.addQuestion(content,user_id);
-        int question_id = questionRepository.getInsertedId();
+    public void addQuestion(String content, int userId,Set<Integer> categoryId) {
+        questionRepository.addQuestion(content,userId);
+        int questionId = questionRepository.getInsertedId();
         for(Integer catId : categoryId) {
-            questionRepository.addCategory(question_id, catId);
+            questionRepository.addCategory(questionId, catId);
         }
     }
 
@@ -31,8 +31,8 @@ public class QuestionServiceImp implements QuestionService {
     }
 
     @Override
-    public Iterable<Question> getAllQuestionsByUser(int user_id) {
-        return questionRepository.getQuestionsByUser(user_id);
+    public Iterable<Question> getAllQuestionsByUser(int userId) {
+        return questionRepository.getQuestionsByUser(userId);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class QuestionServiceImp implements QuestionService {
     }
 
     @Override
-    public int findUserIdfromQuestion(int questionId) {return questionRepository.getUserIdByQuestion(questionId); }
+    public int findUserIdFromQuestion(int questionId) {return questionRepository.getUserIdByQuestion(questionId); }
 
     @Override
     public Iterable<Question> getAllQuestions(){

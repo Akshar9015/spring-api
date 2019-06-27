@@ -8,11 +8,11 @@ import java.util.Set;
 @Service
 public interface QuestionService {
 
-    void addQuestion(String content, int user_id, Set<Integer> categoryId);
+    void addQuestion(String content, int userId, Set<Integer> categoryId);
     Iterable<Question> getAllQuestionsByCategory(int categoryId);
-    Iterable<Question> getAllQuestionsByUser(int user_id);
+    Iterable<Question> getAllQuestionsByUser(int userId);
     void deleteQuestion(int id);
     Iterable<Integer> getQuestionId(int categoryId);
-    int findUserIdfromQuestion(int questionId);
+    int findUserIdFromQuestion(int questionId);
     Iterable<Question> getAllQuestions();
 }

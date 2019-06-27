@@ -2,6 +2,7 @@ package org.upgrad.models;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "answer")
@@ -18,13 +19,13 @@ public class Answer {
     private LocalDateTime date ;
 
     @Column(name = "user_id")
-    private int user_id ;
+    private int userId ;
 
     @Column(name = "question_id")
-    private int question_id;
+    private int questionId;
 
-    @Column(name = "modifiedon")
-    private LocalDateTime modifiedOn ;
+    @Column(name = "modifiedOn")
+    private Date modifiedOn ;
 
     @Transient
     private User user;
@@ -54,27 +55,23 @@ public class Answer {
         this.date = date;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) { this.userId = userId; }
+
+    public int getQuestionId() {
+        return questionId;
     }
 
-    public int getQuestion_id() {
-        return question_id;
-    }
+    public void setQuestionId(int questionId) { this.questionId = questionId; }
 
-    public void setQuestion_id(int question_id) {
-        this.question_id = question_id;
-    }
-
-    public LocalDateTime getModifiedOn() {
+    public Date getModifiedOn() {
         return modifiedOn;
     }
 
-    public void setModifiedOn(LocalDateTime modifiedOn) {
+    public void setModifiedOn( Date modifiedOn) {
         this.modifiedOn = modifiedOn;
     }
 
@@ -85,4 +82,5 @@ public class Answer {
     public void setUser(User user) {
         this.user = user;
     }
- }
+
+}
